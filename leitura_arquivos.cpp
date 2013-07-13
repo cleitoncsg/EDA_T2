@@ -5,15 +5,19 @@
 
 #define MAX 40
 
-struct informacao {
+typedef struct informacao {
     int codigo;
     char nomeDoCurso[80];
     int local;
 };
 
-struct informacao informacoes[MAX];
+informacao informacoes[MAX];
+TNo_Codigo *arvore_codigos;
+TNo_Nome *arvore_nomes;
+TNo_Local *arvore_locais;
 
-void ler_arquivo() {
+
+void controi_arvores() {
 
     FILE *arquivoDeTexto;
     int codigo, local;
@@ -28,8 +32,14 @@ void ler_arquivo() {
         fscanf(arquivoDeTexto, "%d ", &local);
 
         informacoes[identificador].codigo = codigo;
+        inserirArvoreCodigo(arvore_codigos,codigo,identificador);
+        
         informacoes[identificador].local = local;
+        inserirArvoreNome(arvore_nomes,disciplina,identificador);
+        
         strcpy(informacoes[identificador].nomeDoCurso, disciplina);
+        inserirArvoreLocal(arvore_locais,local,identificador);
+        
     }
     
     fclose(arquivoDeTexto);
@@ -60,24 +70,46 @@ void menu(){
 
 }
 
+void retorna_dados(int identificador){
+    if(identificador==-1){
+        printf("Nao foi encontrado\n");
+        return;
+    }
+    printf("Codigo: %d\n",informacoes[identificador].codigo);
+    printf("Disciplina: %s\n",informacoes[identificador].nomeDoCurso);
+    printf("Local: %d\n",informacoes[identificador].local);   
+    system("pause");
+}
+
 int main(){
-    int opcao;
-    ler_arquivo();
+    int opcao,codigoDePesquisa,localDePesquisa;
+    char nomeDePesquisa[80];
+    controi_arvores();
     
+    travessia(arvore_codigos);
     for(;;){
+        system("cls");
         menu();
         
         scanf("%d", &opcao);
         
+        
         switch(opcao){
                 
             case 1:
-                
-                
+                printf("\nInforme o codigo : ");
+                scanf("%d",&codigoDePesquisa);
+                retorna_dados( busca_por_codigo(arvore_codigos,codigoDePesquisa));
                 break;
             case 2:
+                printf("\nInforme o nome do curso : ");
+                gets(nomeDePesquisa);
+                retorna_dados( busca_por_disciplina(arvore_nomes,nomeDePesquisa));
                 break;
             case 3:
+                printf("\nInforme o local : ");
+                scanf("%d",&localDePesquisa);
+                retorna_dados( busca_por_local(arvore_locais,localDePesquisa));
                 break;
             case 4:
                 break;
@@ -90,9 +122,6 @@ int main(){
                 printf("Opcao invalida!");
                 break;
         }
-        
-        
     }
     return 0;
 }
-
