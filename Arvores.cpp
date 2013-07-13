@@ -1,3 +1,5 @@
+#include <string.h>
+
 typedef struct TNo_Codigo {
     int codigo;
     struct TNo_Codigo *esquerda;
@@ -16,26 +18,36 @@ typedef struct TNo_Local {
     struct TNo_Local *direita;
 };
 
-void inserirArvoreCodigo(TNo_Codigo *no, int codigo_inserido, int identificardo) {
+void inserirArvoreCodigo(TNo_Codigo *no, int codigo_inserido, int identificador) {
 
     if (no == NULL) {
         no = (TNo_Codigo*) malloc(sizeof (TNo_Codigo));
         no->direita = NULL;
         no->esquerda = NULL;
         no->codigo = codigo_inserido;
+        return;
+ }
+    else if(no->codigo < codigo_inserido){
+        inserirArvoreCodigo(no->esquerda,codigo_inserido,identificador);
+        return;
     }
-
-    void inserirArvoreCodigo(TNo_Nome *no, char nomeDoCurso[], int identificardo) {
+        
+    else {
+        inserirArvoreCodigo(no->direita,codigo_inserido,identificador);
+        return;
+    }
+}
+    void inserirArvoreNome(TNo_Nome *no, char nomeDoCurso[], int identificador) {
 
         if (no == NULL) {
-            no = (TNo_Codigo*) malloc(sizeof (TNo_Nome));
+            no = (TNo_Nome*) malloc(sizeof (TNo_Nome));
             no->direita = NULL;
             no->esquerda = NULL;
-            no->nome = nomeDoCurso;
+            strcpy(nomeDoCurso, no->nome);
         }
     }
 
-    void inserirArvoreCodigo(TNo_Local *no, int localDoCurso, int identificardo) {
+    void inserirArvoreLocal(TNo_Local *no, int localDoCurso, int identificador) {
 
         if (no == NULL) {
             no = (TNo_Local*) malloc(sizeof (TNo_Local));
@@ -44,4 +56,3 @@ void inserirArvoreCodigo(TNo_Codigo *no, int codigo_inserido, int identificardo)
             no->local = localDoCurso;
         }
     }
-}
